@@ -11,6 +11,8 @@ class GameWorld(tk.Frame):
         self.canvas = tk.Canvas(self, bg = self.bg, width = self.width,
                                 height = self.height)
         self.hero = Hero(self.canvas, self.width/2, self.height/2)
+        self.maze = Maze(self.canvas)
+        self.maze.setup_maze(self.maze.levels[1])
         self.hero.move()
         self.canvas.pack()
         self.pack()
@@ -37,5 +39,46 @@ class Hero(Sprite):
     def move(self):
         self.canvas.create_image(self.x, self.y, anchor = "center", image = self.image)
         self.canvas.update()
+
+class Maze(object):
+    
+    def __init__(self, canvas):
+        self.canvas = canvas
+        
+        path = os.path.join(os.getcwd(), "images/wall.gif")
+        print(path)
+        self.image = tk.PhotoImage(file = path)
+    
+        self.levels = [""]
+    
+        level_1 = ["####################",
+                   "#                  #",
+                   "#                  #",
+                   "#                  #",
+                   "#                  #",
+                   "#                  #",
+                   "#                  #",
+                   "#                  #",
+                   "#                  #",
+                   "#                  #",
+                   "#                  #",
+                   "#                  #",
+                   "#                  #",
+                   "#                  #",
+                   "####################"
+               ]
+        
+        self.levels.append(level_1)
+    
+    def setup_maze(self, level):
+        for y in range(len(level)):
+            for x in range(len(level[y])):
+                char = level[y][x]
+                screen_x = x + (x*32)
+                screen_y = y + (y*32)
+                
+                if char == "#":
+                    self.canvas.create_image(screen_x + 16, screen_y + 16, image = self.image)
+                    self.canvas.update()
         
     
