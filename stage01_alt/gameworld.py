@@ -7,11 +7,11 @@ class GameWorld(tk.Frame):
         super(GameWorld, self).__init__(master)
         self.width = 640
         self.height = 480
-        self.bg = "#2b3e50"
+        self.bg = "#bbbbbb"
         self.canvas = tk.Canvas(self, bg = self.bg, width = self.width,
                                 height = self.height)
 
-        self.draw_grid()
+        # self.draw_grid()
         self.maze = Maze(self.canvas)
         self.maze.setup_maze(self.maze.levels[1])
         
@@ -20,7 +20,8 @@ class GameWorld(tk.Frame):
         self.hero = Hero(self.canvas, hero_x, hero_y)
         self.hero.move(self.hero.x, self.hero.y)
         
-        self.canvas.bind("<Left>", self.hero.move_left)
+        self.canvas.bind("<Left>", lambda _ : self.hero.move_left)
+        print(self.hero.x)
         
         self.canvas.pack()
         self.pack()
@@ -39,7 +40,7 @@ class GameWorld(tk.Frame):
         for i in range(0, self.height, 32):
             self.canvas.create_line(0, i, self.width, i)
         
-
+# -----------------------------------------------------------------
 
 class Sprite(object):
     
@@ -51,6 +52,8 @@ class Sprite(object):
     
     def move(self):
         pass
+
+# ------------------------------------------------------------------
 
 class Hero(Sprite):
     
@@ -65,9 +68,23 @@ class Hero(Sprite):
         self.canvas.create_image(self.x*32, self.y*32, anchor = "nw", image = self.image)
         self.canvas.update()
     
+    def move_right(self, x):
+        self.x += 1
+        self.move(self.x, self.y)
+    
     def move_left(self, x):
         self.x =- 1
         self.move(self.x, self.y)
+    
+    def move_up(self, y):
+        self.y -= 1
+        self.move(self.x, self.y)
+    
+    def move_down(self, y):
+        self.y += 1
+        self.move(self.x, self.y)
+
+#--------------------------------------------------------------------
 
 class Maze(object):
     
@@ -110,5 +127,5 @@ class Maze(object):
                     self.canvas.create_image(screen_x, screen_y, anchor = "nw", image = self.image)
                     # print(screen_x, screen_y)
                     self.canvas.update()
-        
+ # ------------------------------------------------------------------------       
     
